@@ -16,14 +16,14 @@ class TestLeafNode(unittest.TestCase):
         self.assertEqual(node.to_html(), "<p>Hello, world!</p>")
 
     def test_to_html_raise_if_there_is_no_value(self):
-        node = LeafNode("p", None)
+        node = LeafNode("p", "")
 
         with self.assertRaises(ValueError) as context:
             node.to_html()
 
         self.assertEqual(str(context.exception), "value parameter is required")
 
-    def test_to_html_p_if_tag_is_none(self):
+    def test_to_html_if_tag_is_none(self):
         node = LeafNode(None, "Hello, world!")
         self.assertEqual(node.to_html(), "Hello, world!")
 
