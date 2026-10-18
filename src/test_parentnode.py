@@ -4,7 +4,7 @@ from leafnode import LeafNode
 from parentnode import ParentNode
 
 
-class TestLeafNode(unittest.TestCase):
+class TestParentNode(unittest.TestCase):
     def test_default_values(self):
         node = ParentNode(tag="a", children=[])
         self.assertEqual(node.tag, "a")

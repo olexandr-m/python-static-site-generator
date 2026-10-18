@@ -4,7 +4,7 @@ from inline_markdown import split_nodes_delimiter
 from textnode import TextNode, TextType
 
 
-class TestTextNode(unittest.TestCase):
+class TestInlineMarkdown(unittest.TestCase):
     def test_split_nodes_delimiter_happy_path(self):
         node = TextNode("This is text with a `code block` word", TextType.TEXT)
         new_nodes = split_nodes_delimiter([node], "`", TextType.CODE)
