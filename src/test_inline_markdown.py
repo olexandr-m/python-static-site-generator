@@ -1,6 +1,11 @@
 import unittest
 
-from inline_markdown import split_nodes_delimiter, split_nodes_image, split_nodes_link
+from inline_markdown import (
+    split_nodes_delimiter,
+    split_nodes_image,
+    split_nodes_link,
+    text_to_textnodes,
+)
 from textnode import TextNode, TextType
 
 
@@ -353,6 +358,58 @@ class TestInlineMarkdown(unittest.TestCase):
         ]
 
         self.assertEqual(new_nodes, expected)
+
+    # --- text_to_textnodes ---
+
+    def test_text_to_textnodes(self):
+        text = "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://example.com)"
+        new_nodes = text_to_textnodes(text)
+        expected = [
+            TextNode("This is ", TextType.TEXT),
+            TextNode("text", TextType.BOLD),
+            TextNode(" with an ", TextType.TEXT),
+            TextNode("italic", TextType.ITALIC),
+            TextNode(" word and a ", TextType.TEXT),
+            TextNode("code block", TextType.CODE),
+            TextNode(" and an ", TextType.TEXT),
+            TextNode(
+                "obi wan image", TextType.IMAGE, "https://i.imgur.com/fJRm4Vk.jpeg"
+            ),
+            TextNode(" and a ", TextType.TEXT),
+            TextNode("link", TextType.LINK, "https://example.com"),
+        ]
+        self.assertListEqual(new_nodes, expected)
+
+    def test_text_to_textnodes_with_empty_string(self):
+        text = ""
+        new_nodes = text_to_textnodes(text)
+        expected = []
+        self.assertListEqual(new_nodes, expected)
+
+    def test_text_to_textnodes_with_only_text_string(self):
+        text = "Just text"
+        new_nodes = text_to_textnodes(text)
+        expected = [
+            TextNode("Just text", TextType.TEXT),
+        ]
+        self.assertListEqual(new_nodes, expected)
+
+    def test_text_to_textnodes_with_entire_text_is_code(self):
+        text = "`Just code`"
+        new_nodes = text_to_textnodes(text)
+        expected = [
+            TextNode("Just code", TextType.CODE),
+        ]
+        self.assertListEqual(new_nodes, expected)
+
+    def test_text_to_textnodes_if_link_contains_italic_markdown(self):
+        text = "Some text [link](https://example_italic.com)"
+        new_nodes = text_to_textnodes(text)
+        expected = [
+            TextNode("Some text ", TextType.TEXT),
+            TextNode("link", TextType.LINK, "https://example_italic.com"),
+        ]
+        self.assertListEqual(new_nodes, expected)
 
 
 if __name__ == "__main__":
