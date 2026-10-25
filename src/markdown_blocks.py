@@ -12,9 +12,14 @@ class BlockType(str, Enum):
 
 
 def _is_ordered_list(lines: list[str]) -> bool:
-    for i, line in enumerate(lines):
-        if not line.startswith(f"{i + 1}. "):
+    if not lines or not lines[0].startswith("1. "):
+        return False
+
+    for line in lines:
+        parts = line.split(". ", 1)
+        if len(parts) < 2 or not parts[0].isdigit():
             return False
+
     return True
 
 

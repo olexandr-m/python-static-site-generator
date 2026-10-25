@@ -141,7 +141,7 @@ This is the same paragraph on a new line
         type3 = block_to_block_type("1.First\n2.Second")
 
         self.assertEqual(type1, BlockType.PARAGRAPH)
-        self.assertEqual(type2, BlockType.PARAGRAPH)
+        self.assertEqual(type2, BlockType.ORDERED_LIST)
         self.assertEqual(type3, BlockType.PARAGRAPH)
 
     def test_block_to_block_type_with_normal_paragraph(self):

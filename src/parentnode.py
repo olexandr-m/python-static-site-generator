@@ -13,7 +13,7 @@ class ParentNode(HTMLNode):
     def to_html(self) -> str:
         if not self.tag:
             raise ValueError("tag parameter is required")
-        if not self.children:
+        if self.children is None:
             raise ValueError("children are required")
         result = f"<{self.tag}{self.props_to_html()}>"
         for child in self.children:

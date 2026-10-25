@@ -21,13 +21,9 @@ class TestParentNode(unittest.TestCase):
 
         self.assertEqual(str(context.exception), "tag parameter is required")
 
-    def test_to_html_raise_if_there_is_no_children(self):
+    def test_to_html_do_not_raise_if_there_is_no_children(self):
         parent_node = ParentNode("p", [])
-
-        with self.assertRaises(ValueError) as context:
-            parent_node.to_html()
-
-        self.assertEqual(str(context.exception), "children are required")
+        self.assertEqual(parent_node.to_html(), "<p></p>")
 
     def test_to_html_raise_if_tag_is_none(self):
         node = ParentNode(None, [LeafNode("span", "text")])
