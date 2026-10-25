@@ -1,11 +1,13 @@
-from textnode import TextNode, TextType
+from copystatic import clean_and_copy_directory
 
 
 def main() -> None:
-    text = "This is some anchor text"
-    type = TextType.LINK
-    url = "https://www.boot.dev"
-    print(TextNode(text, type, url))
+    source = "static"
+    destination = "public"
+
+    print("Starting static site generator...")
+    clean_and_copy_directory(source, destination)
+    print("Site generated successfully!")
 
 
 if __name__ == "__main__":
