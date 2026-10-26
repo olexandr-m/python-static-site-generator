@@ -1,9 +1,14 @@
 import unittest
 
-from markdown_extractor import extract_markdown_images, extract_markdown_links
+from markdown_extractor import (
+    extract_markdown_images,
+    extract_markdown_links,
+    extract_title,
+)
 
 
 class TestMarkdownExtractor(unittest.TestCase):
+    # --- extract_markdown_images ---
     def test_extract_markdown_images(self):
         matches = extract_markdown_images(
             "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png)"
@@ -46,6 +51,7 @@ class TestMarkdownExtractor(unittest.TestCase):
         matches = extract_markdown_images("This is text with a ![alt text]()")
         self.assertListEqual([("alt text", "")], matches)
 
+    # --- extract_markdown_links ---
     def test_extract_markdown_links(self):
         matches = extract_markdown_links(
             "This is text with an [anchor text](https://www.example.com)"
@@ -87,6 +93,31 @@ class TestMarkdownExtractor(unittest.TestCase):
     def test_extract_markdown_links_with_anchor_text_but_without_link(self):
         matches = extract_markdown_links("This is text with a [anchor text]()")
         self.assertListEqual([("anchor text", "")], matches)
+
+    # --- extract_title ---
+    def test_extract_title(self):
+        title = extract_title("# Title")
+        expected = "Title"
+
+        self.assertEqual(title, expected)
+
+    def test_extract_title_whith_h2(self):
+        with self.assertRaises(ValueError) as context:
+            extract_title("## Title")
+
+        self.assertEqual(str(context.exception), "Title is required")
+
+    def test_extract_title_when_heading_is_at_the_beginning(self):
+        title = extract_title("Some text\n# Title\nMore text")
+        expected = "Title"
+
+        self.assertEqual(title, expected)
+
+    def test_extract_title_when_there_is_no_heading(self):
+        with self.assertRaises(ValueError) as context:
+            extract_title("Just a text")
+
+        self.assertEqual(str(context.exception), "Title is required")
 
 
 if __name__ == "__main__":
